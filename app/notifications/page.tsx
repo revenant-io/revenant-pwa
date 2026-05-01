@@ -39,7 +39,7 @@ export default function NotificationsPage() {
               title: "Dismiss",
             },
           ],
-        });
+        } as NotificationOptions & { actions: any[] });
       });
     }
   };
