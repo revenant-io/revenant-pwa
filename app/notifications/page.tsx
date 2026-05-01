@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 export default function NotificationsPage() {
   const [permission, setPermission] = useState<NotificationPermission | null>(null);
@@ -54,18 +53,7 @@ export default function NotificationsPage() {
   const isDenied = permission === "denied";
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-      <header className="border-b border-slate-700 p-4">
-        <div className="max-w-2xl mx-auto">
-          <Link href="/" className="text-blue-400 hover:text-blue-300 text-sm font-medium mb-2 block">
-            ← Back
-          </Link>
-          <h1 className="text-3xl font-bold">Push Notifications</h1>
-          <p className="text-slate-400 mt-1">Test notification permissions and delivery</p>
-        </div>
-      </header>
-
-      <main className="max-w-2xl mx-auto p-4 py-8">
+    <div className="max-w-2xl mx-auto p-4 py-8">
         <div className="space-y-8">
           {/* Support Check */}
           {!isSupported && (
@@ -173,7 +161,6 @@ export default function NotificationsPage() {
             </ul>
           </div>
         </div>
-      </main>
     </div>
   );
 }
