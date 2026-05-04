@@ -10,6 +10,12 @@
 /* Safe area utilities used by shell components */
 .safe-top    { padding-top:    env(safe-area-inset-top,    0px); }
 .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pb-nav      { padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0px)); }
+
+/* Full-height container: 100dvh everywhere, corrected on iOS via --vh-ios */
+.full-height { height: 100dvh; }
+.ios .full-height { height: calc(var(--vh-ios, 1dvh) * 100); }
+
 
 :root {
   --background: #ffffff;
@@ -25,7 +31,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #0f172a; /* slate-900, matches bottom nav so iOS safe-area bleed is invisible */
     --foreground: #ededed;
   }
 }

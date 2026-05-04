@@ -4,7 +4,7 @@ import { BottomNav } from "./BottomNav";
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-dvh overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+    <div className="flex full-height overflow-hidden bg-gradient-to-br from-slate-900 to-slate-800 text-white">
       <Sidebar />
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <TopBar />
