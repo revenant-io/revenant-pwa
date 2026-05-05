@@ -7,6 +7,7 @@ const navItems = [
   { href: "/", label: "Home", icon: "🏠" },
   { href: "/counter", label: "Counter", icon: "📊" },
   { href: "/notifications", label: "Notifications", icon: "🔔" },
+  { href: "/debug", label: "Debug", icon: "🛠️" },
 ];
 
 export function Sidebar() {

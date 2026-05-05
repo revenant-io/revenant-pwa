@@ -6,6 +6,7 @@ const pageNames: Record<string, string> = {
   "/": "Home",
   "/counter": "Counter",
   "/notifications": "Notifications",
+  "/debug": "Debug",
 };
 
 export function TopBar() {
