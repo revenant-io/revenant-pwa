@@ -13,11 +13,12 @@ interface ChatPanelProps {
   onClose: () => void;
   messages: Message[];
   input: string;
+  isStreaming: boolean;
   onInputChange: (value: string) => void;
   onSend: () => void;
 }
 
-export function ChatPanel({ isOpen, onClose, messages, input, onInputChange, onSend }: ChatPanelProps) {
+export function ChatPanel({ isOpen, onClose, messages, input, isStreaming, onInputChange, onSend }: ChatPanelProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -56,6 +57,15 @@ export function ChatPanel({ isOpen, onClose, messages, input, onInputChange, onS
         {messages.length === 0 && (
           <p className="text-slate-500 text-sm text-center mt-8">Send a message to start chatting.</p>
         )}
+        {isStreaming && messages[messages.length - 1]?.role === "bot" && messages[messages.length - 1]?.text === "" && (
+          <div className="flex justify-start">
+            <div className="bg-slate-700 text-slate-100 px-3 py-2 rounded-2xl rounded-bl-sm text-sm flex gap-1 items-center">
+              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0ms]" />
+              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]" />
+              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:300ms]" />
+            </div>
+          </div>
+        )}
         {messages.map((msg) => (
           <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
@@ -87,7 +97,7 @@ export function ChatPanel({ isOpen, onClose, messages, input, onInputChange, onS
           />
           <button
             onClick={onSend}
-            disabled={!input.trim()}
+            disabled={!input.trim() || isStreaming}
             aria-label="Send"
             className="w-9 h-9 shrink-0 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-40
               disabled:cursor-not-allowed flex items-center justify-center transition-colors"
