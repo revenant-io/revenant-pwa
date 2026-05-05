@@ -36,47 +36,53 @@ export default function Debug() {
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === "accepted") {
-        setIsInstalled(true);
-      }
+      if (outcome === "accepted") setIsInstalled(true);
       setDeferredPrompt(null);
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto p-4 py-8">
-      {/* Status Bar */}
+      {/* Status bar */}
       <div className="grid grid-cols-2 gap-4 mb-8">
-        <div className={`p-4 rounded-lg border ${isOnline ? "bg-green-900/20 border-green-500" : "bg-red-900/20 border-red-500"}`}>
-          <p className="text-sm text-slate-300">Network</p>
-          <p className="text-lg font-semibold">{isOnline ? "🟢 Online" : "🔴 Offline"}</p>
+        <div className={`p-4 rounded-lg border ${
+          isOnline
+            ? "bg-[#DDE6CC] border-[#6B8A5A] text-[#4A6A48]"
+            : "bg-[#F4D5D1] border-[#B8392E] text-[#B8392E]"
+        }`}>
+          <p className="text-sm">Network</p>
+          <p className="text-lg font-semibold">{isOnline ? "Online" : "Offline"}</p>
         </div>
-        <div className={`p-4 rounded-lg border ${isInstalled ? "bg-blue-900/20 border-blue-500" : "bg-amber-900/20 border-amber-500"}`}>
-          <p className="text-sm text-slate-300">App Status</p>
-          <p className="text-lg font-semibold">{isInstalled ? "📱 Installed" : "📥 Web App"}</p>
+        <div className={`p-4 rounded-lg border ${
+          isInstalled
+            ? "bg-[#F4DED1] border-[#A6553A] text-[#8E4A33]"
+            : "bg-[#FCF1D9] border-[#E8B84A] text-[#B8901E]"
+        }`}>
+          <p className="text-sm">App status</p>
+          <p className="text-lg font-semibold">{isInstalled ? "Installed" : "Web App"}</p>
         </div>
       </div>
 
-      {/* Install Prompt */}
+      {/* Install prompt */}
       {deferredPrompt && !isInstalled && (
-        <div className="bg-amber-900/30 border border-amber-500 rounded-lg p-4 mb-8">
-          <h2 className="font-semibold mb-2">Install Revenant</h2>
-          <p className="text-sm text-slate-300 mb-4">
+        <div className="bg-[#FCF1D9] border border-[#E8B84A] rounded-xl p-5 mb-8">
+          <h2 className="font-semibold text-[#2A1B0E] mb-2">Install Revenant</h2>
+          <p className="text-sm text-[#54422D] mb-4">
             Get a native-like experience with offline access and push notifications.
           </p>
           <button
             onClick={handleInstall}
-            className="bg-amber-600 hover:bg-amber-700 px-4 py-2 rounded-lg font-medium transition-colors"
+            className="bg-[#A6553A] hover:bg-[#C16A4D] text-[#FBF7F0] px-4 py-2 rounded-full font-medium transition-colors duration-[140ms]"
           >
-            Install App
+            Install app
           </button>
         </div>
       )}
 
-      {/* iOS Instructions */}
-      <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4 mb-8">
-        <h2 className="font-semibold mb-3">📱 iPhone Install Guide</h2>
-        <ol className="text-sm text-slate-300 space-y-2 list-decimal list-inside">
+      {/* iOS guide */}
+      <div className="bg-[#FBF7F0] border border-[#DCCFB5] rounded-xl p-5 mb-8 shadow-[0_2px_4px_rgba(42,27,14,0.06)]">
+        <h2 className="font-semibold text-[#2A1B0E] mb-3">iPhone install guide</h2>
+        <ol className="text-sm text-[#54422D] space-y-2 list-decimal list-inside">
           <li>Tap the Share button (square with arrow)</li>
           <li>Scroll and tap "Add to Home Screen"</li>
           <li>Enter a name and tap "Add"</li>
@@ -84,35 +90,35 @@ export default function Debug() {
         </ol>
       </div>
 
-      {/* Demo Features */}
+      {/* Demo features */}
       <div className="grid md:grid-cols-2 gap-6">
         <Link
           href="/counter"
-          className="block p-6 bg-slate-700/30 border border-slate-600 rounded-lg hover:bg-slate-700/50 transition-colors"
+          className="block p-6 bg-[#FBF7F0] border border-[#DCCFB5] rounded-xl hover:bg-[#ECE3D2] transition-colors duration-[140ms] shadow-[0_2px_4px_rgba(42,27,14,0.06)]"
         >
-          <h2 className="text-xl font-semibold mb-2">📊 Offline Counter</h2>
-          <p className="text-slate-400 text-sm mb-4">
+          <h2 className="text-lg font-semibold text-[#2A1B0E] mb-2">Offline counter</h2>
+          <p className="text-[#8A6F4F] text-sm mb-4">
             A counter that works offline using IndexedDB. Your data persists even when disconnected.
           </p>
-          <span className="text-blue-400 text-sm font-medium">Try it →</span>
+          <span className="text-[#A6553A] text-sm font-medium">Try it →</span>
         </Link>
 
         <Link
           href="/notifications"
-          className="block p-6 bg-slate-700/30 border border-slate-600 rounded-lg hover:bg-slate-700/50 transition-colors"
+          className="block p-6 bg-[#FBF7F0] border border-[#DCCFB5] rounded-xl hover:bg-[#ECE3D2] transition-colors duration-[140ms] shadow-[0_2px_4px_rgba(42,27,14,0.06)]"
         >
-          <h2 className="text-xl font-semibold mb-2">🔔 Notifications</h2>
-          <p className="text-slate-400 text-sm mb-4">
+          <h2 className="text-lg font-semibold text-[#2A1B0E] mb-2">Notifications</h2>
+          <p className="text-[#8A6F4F] text-sm mb-4">
             Request push notification permissions and send test notifications to your device.
           </p>
-          <span className="text-blue-400 text-sm font-medium">Try it →</span>
+          <span className="text-[#A6553A] text-sm font-medium">Try it →</span>
         </Link>
       </div>
 
       {/* Tips */}
-      <div className="mt-8 bg-slate-700/50 border border-slate-600 rounded-lg p-4">
-        <h2 className="font-semibold mb-3">💡 Tips</h2>
-        <ul className="text-sm text-slate-300 space-y-2 list-disc list-inside">
+      <div className="mt-8 bg-[#FBF7F0] border border-[#DCCFB5] rounded-xl p-5 shadow-[0_2px_4px_rgba(42,27,14,0.06)]">
+        <h2 className="font-semibold text-[#2A1B0E] mb-3">Tips</h2>
+        <ul className="text-sm text-[#54422D] space-y-2 list-disc list-inside">
           <li>Open DevTools (F12) → Application → Service Workers to see registration</li>
           <li>Toggle offline in DevTools → Network → toggle offline</li>
           <li>The app works offline because assets are cached by the service worker</li>

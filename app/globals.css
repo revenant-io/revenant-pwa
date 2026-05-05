@@ -18,8 +18,30 @@
 
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Revenant brand palette */
+  --rv-cream-50:  #FBF7F0;
+  --rv-cream-100: #F5EFE6;
+  --rv-cream-200: #ECE3D2;
+  --rv-cream-300: #DCCFB5;
+  --rv-cocoa-900: #2A1B0E;
+  --rv-cocoa-700: #54422D;
+  --rv-cocoa-500: #8A6F4F;
+  --rv-cocoa-300: #B5A084;
+  --rv-terra-600: #A6553A;
+  --rv-terra-500: #C16A4D;
+  --rv-terra-700: #8E4A33;
+  --rv-terra-100: #F4DED1;
+  --rv-gold-500:  #E8B84A;
+  --rv-gold-100:  #FCF1D9;
+  --rv-gold-700:  #B8901E;
+  --rv-sage-500:  #6B8A5A;
+  --rv-sage-100:  #DDE6CC;
+  --rv-sage-700:  #4A6A48;
+  --rv-danger:    #B8392E;
+  --rv-danger-tint: #F4D5D1;
+
+  --background: var(--rv-cream-100);
+  --foreground: var(--rv-cocoa-900);
 }
 
 @theme inline {
@@ -30,15 +52,8 @@
   --font-display: var(--font-fraunces), 'Iowan Old Style', Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a; /* slate-900, matches bottom nav so iOS safe-area bleed is invisible */
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }

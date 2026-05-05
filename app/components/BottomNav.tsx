@@ -14,15 +14,15 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="lg:hidden flex items-center justify-around bg-slate-900/95 backdrop-blur-md border-t border-slate-700 safe-bottom">
+    <nav className="lg:hidden flex items-center justify-around bg-[#FBF7F0]/95 backdrop-blur-md border-t border-[#DCCFB5] safe-bottom">
       {tabs.map((tab) => {
         const isActive = pathname === tab.href;
         return (
           <Link
             key={tab.href}
             href={tab.href}
-            className={`flex flex-col items-center gap-1 py-3 px-4 min-h-[56px] justify-center transition-colors ${
-              isActive ? "text-blue-400" : "text-slate-400 hover:text-slate-200"
+            className={`flex flex-col items-center gap-1 py-3 px-4 min-h-[56px] justify-center transition-colors duration-[140ms] ${
+              isActive ? "text-[#A6553A]" : "text-[#8A6F4F] hover:text-[#2A1B0E]"
             }`}
           >
             <span className="text-lg">{tab.icon}</span>
