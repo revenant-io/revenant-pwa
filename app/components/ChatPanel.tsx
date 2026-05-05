@@ -36,17 +36,26 @@ export function ChatPanel({ isOpen, onClose, messages, input, isStreaming, onInp
     }
   }
 
+  const showTyping = isStreaming &&
+    messages[messages.length - 1]?.role === "bot" &&
+    messages[messages.length - 1]?.text === "";
+
   const panelContent = (
-    <div className="flex flex-col h-full bg-slate-900">
+    <div className="flex flex-col h-full bg-[#F5EFE6]">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 h-14 shrink-0 bg-slate-800 border-b border-slate-700 rounded-t-2xl">
-        <span className="font-semibold text-white">Chat</span>
+      <div className="flex items-center justify-between px-4 h-14 shrink-0 bg-[#FBF7F0] border-b border-[#DCCFB5] rounded-t-2xl">
+        <span
+          className="text-[#2A1B0E] text-base font-medium tracking-[-0.01em]"
+          style={{ fontFamily: "var(--font-fraunces), 'Iowan Old Style', Georgia, serif" }}
+        >
+          Revenant
+        </span>
         <button
           onClick={onClose}
           aria-label="Close chat"
-          className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-700 transition-colors"
+          className="p-1.5 rounded-lg text-[#8A6F4F] hover:text-[#2A1B0E] hover:bg-[#ECE3D2] transition-colors duration-[140ms]"
         >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.75}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
@@ -55,35 +64,41 @@ export function ChatPanel({ isOpen, onClose, messages, input, isStreaming, onInp
       {/* Messages */}
       <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-3">
         {messages.length === 0 && (
-          <p className="text-slate-500 text-sm text-center mt-8">Send a message to start chatting.</p>
+          <p className="text-[#8A6F4F] text-sm text-center mt-8">
+            Nothing here yet. Send a message to get started.
+          </p>
         )}
-        {isStreaming && messages[messages.length - 1]?.role === "bot" && messages[messages.length - 1]?.text === "" && (
+        {messages.map((msg) => {
+          // Don't render an empty bot bubble while the typing indicator is active
+          if (msg.role === "bot" && msg.text === "" && isStreaming) return null;
+          return (
+            <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+              <div
+                className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm leading-relaxed ${
+                  msg.role === "user"
+                    ? "bg-[#A6553A] text-[#FBF7F0] rounded-br-sm"
+                    : "bg-[#FBF7F0] text-[#54422D] border border-[#DCCFB5] rounded-bl-sm"
+                }`}
+              >
+                {msg.text}
+              </div>
+            </div>
+          );
+        })}
+        {showTyping && (
           <div className="flex justify-start">
-            <div className="bg-slate-700 text-slate-100 px-3 py-2 rounded-2xl rounded-bl-sm text-sm flex gap-1 items-center">
-              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:0ms]" />
-              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:150ms]" />
-              <span className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce [animation-delay:300ms]" />
+            <div className="bg-[#FBF7F0] border border-[#DCCFB5] px-3 py-2.5 rounded-2xl rounded-bl-sm flex gap-1 items-center">
+              <span className="w-1.5 h-1.5 bg-[#B5A084] rounded-full animate-bounce [animation-delay:0ms]" />
+              <span className="w-1.5 h-1.5 bg-[#B5A084] rounded-full animate-bounce [animation-delay:150ms]" />
+              <span className="w-1.5 h-1.5 bg-[#B5A084] rounded-full animate-bounce [animation-delay:300ms]" />
             </div>
           </div>
         )}
-        {messages.map((msg) => (
-          <div key={msg.id} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
-            <div
-              className={`max-w-[80%] px-3 py-2 rounded-2xl text-sm leading-relaxed ${
-                msg.role === "user"
-                  ? "bg-blue-600 text-white rounded-br-sm"
-                  : "bg-slate-700 text-slate-100 rounded-bl-sm"
-              }`}
-            >
-              {msg.text}
-            </div>
-          </div>
-        ))}
         <div ref={messagesEndRef} />
       </div>
 
       {/* Input */}
-      <div className="shrink-0 p-3 border-t border-slate-700 bg-slate-800 safe-bottom lg:pb-3">
+      <div className="shrink-0 p-3 border-t border-[#DCCFB5] bg-[#FBF7F0] safe-bottom lg:pb-3">
         <div className="flex items-center gap-2">
           <input
             ref={inputRef}
@@ -92,17 +107,19 @@ export function ChatPanel({ isOpen, onClose, messages, input, isStreaming, onInp
             onChange={(e) => onInputChange(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type a message…"
-            className="flex-1 bg-slate-700 text-white placeholder-slate-400 text-sm px-3 py-2 rounded-xl
-              border border-slate-600 focus:outline-none focus:border-blue-500 transition-colors"
+            className="flex-1 bg-[#ECE3D2] text-[#2A1B0E] placeholder-[#B5A084] text-sm px-3 py-2 rounded-[6px]
+              border border-[#B5A084] focus:outline-none focus:border-[#A6553A] focus:ring-1 focus:ring-[#A6553A]
+              transition-colors duration-[140ms]"
           />
           <button
             onClick={onSend}
             disabled={!input.trim() || isStreaming}
             aria-label="Send"
-            className="w-9 h-9 shrink-0 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-40
-              disabled:cursor-not-allowed flex items-center justify-center transition-colors"
+            className="w-9 h-9 shrink-0 rounded-full bg-[#A6553A] hover:bg-[#C16A4D] active:bg-[#8E4A33]
+              disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center
+              transition-colors duration-[140ms]"
           >
-            <svg className="w-4 h-4 text-white translate-x-px" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <svg className="w-4 h-4 text-[#FBF7F0] translate-x-px" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
             </svg>
           </button>
@@ -125,7 +142,7 @@ export function ChatPanel({ isOpen, onClose, messages, input, isStreaming, onInp
         {/* Sheet */}
         <div
           className={`fixed inset-x-0 bottom-0 z-50 h-[85dvh] rounded-t-2xl overflow-hidden
-            transition-transform duration-300 ease-out ${
+            transition-transform duration-[220ms] ease-out ${
               isOpen ? "translate-y-0" : "translate-y-full"
             }`}
           style={{ height: "calc(var(--vh-ios, 1dvh) * 85)" }}
@@ -139,14 +156,15 @@ export function ChatPanel({ isOpen, onClose, messages, input, isStreaming, onInp
         {/* Backdrop */}
         <div
           onClick={onClose}
-          className={`fixed inset-0 z-40 bg-black/30 transition-opacity duration-200 ${
+          className={`fixed inset-0 z-40 bg-black/20 transition-opacity duration-[220ms] ${
             isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
           }`}
         />
         {/* Panel */}
         <div
-          className={`fixed bottom-20 right-6 z-50 w-[380px] h-[520px] rounded-2xl overflow-hidden shadow-2xl shadow-black/60
-            transition-all duration-200 origin-bottom-right ${
+          className={`fixed bottom-20 right-6 z-50 w-[380px] h-[520px] rounded-2xl overflow-hidden
+            shadow-[0_32px_80px_rgba(42,27,14,0.16),_0_8px_16px_rgba(42,27,14,0.06)]
+            transition-all duration-[220ms] origin-bottom-right ${
               isOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
             }`}
         >
