@@ -1,15 +1,19 @@
 "use client";
 
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState } from "react";
+
+type NotificationAction = { action: string; title: string }
 
 export default function NotificationsPage() {
   const [permission, setPermission] = useState<NotificationPermission | null>(null);
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
     if ("Notification" in window) {
-      setPermission(Notification.permission);
+      Promise.resolve(Notification.permission).then((perm) => {
+        setPermission(perm);
+      });
     }
   }, []);
 
@@ -32,21 +36,15 @@ export default function NotificationsPage() {
           actions: [
             { action: "open", title: "Open App" },
             { action: "dismiss", title: "Dismiss" },
-          ],
-        } as NotificationOptions & { actions: any[] });
+          ] as NotificationAction[],
+        } as NotificationOptions);
       });
     }
   };
 
-  if (!isMounted) {
-    return (
-      <div className="min-h-screen bg-[#F5EFE6] text-[#2A1B0E] flex items-center justify-center">
-        Loading…
-      </div>
-    );
-  }
-
-  const isSupported = "Notification" in window;
+  // On the server or before mount, Notification API isn't available.
+  // permission remains null until the effect runs.
+  const isSupported = typeof window !== "undefined" && "Notification" in window;
   const isGranted = permission === "granted";
   const isDenied = permission === "denied";
 
@@ -160,7 +158,7 @@ export default function NotificationsPage() {
           <ul className="text-sm text-[#54422D] space-y-2 list-disc list-inside">
             <li>Open DevTools (F12) → Application → Service Workers to see registration</li>
             <li>Check DevTools → Application → Manifest to verify manifest.json is loaded</li>
-            <li>For production, you'll need Firebase Cloud Messaging (FCM) or a similar service</li>
+            <li>For production, you&apos;ll need Firebase Cloud Messaging (FCM) or a similar service</li>
             <li>Test on both iOS and Android to see platform differences</li>
           </ul>
         </div>

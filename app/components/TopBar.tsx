@@ -4,9 +4,10 @@ import { usePathname } from "next/navigation";
 
 const pageNames: Record<string, string> = {
   "/": "Home",
-  "/counter": "Counter",
-  "/notifications": "Notifications",
+  "/expenses": "Expenses",
+  "/expenses/new": "New Expense",
   "/debug": "Debug",
+  "/profile": "Profile",
 };
 
 export function TopBar() {

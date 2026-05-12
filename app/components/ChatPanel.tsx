@@ -98,7 +98,10 @@ export function ChatPanel({ isOpen, onClose, messages, input, isStreaming, onInp
       </div>
 
       {/* Input */}
-      <div className="shrink-0 p-3 border-t border-[#DCCFB5] bg-[#FBF7F0] safe-bottom lg:pb-3">
+      <div
+        className="shrink-0 pt-3 px-3 border-t border-[#DCCFB5] bg-[#FBF7F0]"
+        style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom, 0px))' }}
+      >
         <div className="flex items-center gap-2">
           <input
             ref={inputRef}

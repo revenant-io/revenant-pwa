@@ -8,13 +8,14 @@ export async function POST(
 ) {
   const { session_id } = await params;
   const { message } = await request.json();
+  const token = request.cookies.get("token")?.value ?? "";
 
   const upstream = await fetch(`${CHATBOT_URL}/chat/${session_id}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    // The chatbot server has a FastAPI dependency bug that merges two body params;
-    // both keys must be present for the request to pass validation.
-    body: JSON.stringify({ request: { message }, body: { message } }),
+    // FastAPI merges multiple Pydantic body params by wrapping each in its param name.
+    // token must be inside both nested objects so body.token is populated server-side.
+    body: JSON.stringify({ request: { message, token }, body: { message, token } }),
   });
 
   if (!upstream.ok) {

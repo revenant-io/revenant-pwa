@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PWAInitializer } from "./PWAInitializer";
-import { AppShell } from "./components/AppShell";
+import { AuthProvider } from "@/lib/auth-context";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -55,7 +55,9 @@ export default function RootLayout({
     >
       <body className="h-full">
         <PWAInitializer />
-        <AppShell>{children}</AppShell>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

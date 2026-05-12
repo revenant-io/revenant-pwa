@@ -1,40 +1,49 @@
 "use client";
 
+export const dynamic = 'force-dynamic'
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+
 export default function Debug() {
   const [isInstalled, setIsInstalled] = useState(false);
-  const [isOnline, setIsOnline] = useState(true);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
   useEffect(() => {
-    setIsOnline(navigator.onLine);
-    window.addEventListener("online", () => setIsOnline(true));
-    window.addEventListener("offline", () => setIsOnline(false));
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
 
     const handler = (e: Event) => {
       e.preventDefault();
-      setDeferredPrompt(e);
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
 
     window.addEventListener("beforeinstallprompt", handler);
     window.addEventListener("appinstalled", () => setIsInstalled(true));
 
-    if (window.matchMedia("(display-mode: standalone)").matches) {
-      setIsInstalled(true);
-    }
+    // Check standalone mode asynchronously to avoid synchronous setState in effect
+    Promise.resolve(window.matchMedia("(display-mode: standalone)").matches).then(
+      (isStandalone) => { if (isStandalone) setIsInstalled(true); }
+    );
 
     return () => {
       window.removeEventListener("beforeinstallprompt", handler);
-      window.removeEventListener("online", () => setIsOnline(true));
-      window.removeEventListener("offline", () => setIsOnline(false));
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
     };
   }, []);
 
   const handleInstall = async () => {
     if (deferredPrompt) {
-      deferredPrompt.prompt();
+      await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === "accepted") setIsInstalled(true);
       setDeferredPrompt(null);
@@ -84,25 +93,14 @@ export default function Debug() {
         <h2 className="font-semibold text-[#2A1B0E] mb-3">iPhone install guide</h2>
         <ol className="text-sm text-[#54422D] space-y-2 list-decimal list-inside">
           <li>Tap the Share button (square with arrow)</li>
-          <li>Scroll and tap "Add to Home Screen"</li>
-          <li>Enter a name and tap "Add"</li>
+          <li>Scroll and tap &ldquo;Add to Home Screen&rdquo;</li>
+          <li>Enter a name and tap &ldquo;Add&rdquo;</li>
           <li>The app will appear on your home screen</li>
         </ol>
       </div>
 
       {/* Demo features */}
       <div className="grid md:grid-cols-2 gap-6">
-        <Link
-          href="/counter"
-          className="block p-6 bg-[#FBF7F0] border border-[#DCCFB5] rounded-xl hover:bg-[#ECE3D2] transition-colors duration-[140ms] shadow-[0_2px_4px_rgba(42,27,14,0.06)]"
-        >
-          <h2 className="text-lg font-semibold text-[#2A1B0E] mb-2">Offline counter</h2>
-          <p className="text-[#8A6F4F] text-sm mb-4">
-            A counter that works offline using IndexedDB. Your data persists even when disconnected.
-          </p>
-          <span className="text-[#A6553A] text-sm font-medium">Try it →</span>
-        </Link>
-
         <Link
           href="/notifications"
           className="block p-6 bg-[#FBF7F0] border border-[#DCCFB5] rounded-xl hover:bg-[#ECE3D2] transition-colors duration-[140ms] shadow-[0_2px_4px_rgba(42,27,14,0.06)]"
